@@ -1,7 +1,7 @@
 # Tinkering-Lab
 Tinkering with different technologies
 
-Technologies
+
 --> AWS
 --> AI
 --> Kubernetes
