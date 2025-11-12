@@ -58,3 +58,20 @@ Troubleshooting Internet Accessibility for an EC2-Hosted Application
 Troubleshooting Connectivity Issues for Package Installation on EC2
 Creating a Private ECR Repository
 Configure NAT Gateway for Internet Access in a Private VPC
+Deploying and Managing Applications on AWS
+Load Balancing EC2 Instances with Application Load Balancer
+Managing EC2 Access with S3 Role-based Permissions
+Deploying Containerized Applications with Amazon ECS
+Automating Infrastructure Deployment with AWS CloudFormation
+Hosting a Static Website on AWS S3
+Enable Internet Access for Private EC2 using NAT Instance
+Securing Data with AWS KMS
+Building and Managing NoSQL Databases with AWS DynamoDB
+Scaling and Managing Kubernetes Clusters with Amazon EKS
+Implementing Auto Scaling for High Availability in AWS
+CI/CD Automation Using AWS CodePipeline
+Event-Driven Processing with Amazon S3 and Lambda
+Integrating AWS SQS and SNS for Reliable Messaging
+Centralized Audit Logging with VPC Peering
+Deploying Containerized Applications with AWS ECS
+Building and Managing APIs with AWS API Gateway
