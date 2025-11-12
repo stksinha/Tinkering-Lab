@@ -1,0 +1,37 @@
+Requirement: Create a keypair.
+
+==================
+LET'S TINKER
+==================
+Keypair is used in AWS for login to a AWS instance. It is like providing User ID & Password when we login to the system; but with more security. 
+
+There are two approach for creating a keypair. We will explore both ways one by one:
+
+----------------------------------
+Creating keypair from AWS console
+----------------------------------
+1. Go to EC2->Key Pairs
+2. Click on "Create key pair"
+3. Provide Keypair name
+4. Choose Keypair type (Default RSA, other option is ED25519)
+5. Choose the format in which you want to save the file - .pem (for OpenSSH) or .ppk (for PuTTY)
+6. Optional: Provide a tag to personalize if you are considering it as part of any personal project and make it easily identifiable in case of multiple users and keys present.
+7. Click on "Create Create key pair" at bottom and it will create a key pair and also gets downloaded in your local.
+
+--------------------------------
+Create keypair from AWS CLI/SDK
+--------------------------------
+aws ec2 create-key-pair --key-name test-key --region us-east-1 --key-type rsa --key-format pem --query "KeyMaterial" --output text 
+
+#############################################################################################################################################################
+Above all are mandatory options and almost same as AWS console options. 
+But there are additional advantages like you can specify the region (In AWS console you need to make sure you are creating key in the Region & zone you need)
+--query option prints privatekey material to output and if you mention the filename like below, it will save the private key material to the specified file:
+
+aws ec2 create-key-pair --key-name test-key --key-type rsa --key-format pem --query "KeyMaterial" --output text > test-key.pem
+
+--dry-run=true/false option checks whether you have the required  permissions  for  the  action, without actually making the request, and provides an error response. If you have the required permissions, the error response is DryRun-Operation . Otherwise, it is UnauthorizedOperation .
+##############################################################################################################################################################
+o For RSA key pairs, the key fingerprint is the SHA-1 digest of the DER encoded private key. 
+o For  ED25519  key pairs, the key fingerprint is the base64-encoded SHA-256 digest, which is the default for OpenSSH, starting with OpenSSH 6.8
+##############################################################################################################################################################
