@@ -24,4 +24,8 @@ Create volume from AWS CLI/SDK
 --------------------------------------
 
 aws ec2 create-volume --availability-zone us-east-1a --volume-type gp3 --size 2 --tag-specifications 'ResourceType=volume,Tags=[{Key=Name,Value=test-volume}]'
+
+##############################################################################################################################################################
 --encrypted | --no-encrupted provides option to encrypt the volume. This option is disabled by default.
+Encryption option is not available in AWS console, unless you are creating new EBS from a volume snapshot or enabled account level encryption EC2 dashboard settings-> Data protection and security.
+###############################################################################################################################################################
