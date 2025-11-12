@@ -1,1 +1,13 @@
-
+Create a keypair in AWS
+Create a Security Group
+Create a GP3 Volume
+Create a Subnet
+Allocate Elastic IP
+Task 6: Launch EC2 instance
+Task 7: Change EC2 Instance Type
+Task 8: Enable Stop Protection for EC2 Instance
+Task 9: Enable Termination Protection for EC2 Instance
+Task 10: Attach Elastic IP to EC2 Instance
+Task 11: Attach Elastic Network Interface to EC2 Instance
+Attach Volume to EC2 Instance
+ 
