@@ -1,0 +1,27 @@
+Requirement: Create a gp3 volume with size 2GiB.
+
+==================
+LET'S TINKER
+==================
+
+There are two approach for creating a EBS volume. We will explore both ways one by one:
+
+----------------------------------
+Creating volume from AWS console
+----------------------------------
+1. Go to EC2->Elastic Block Store->Volumes
+2. Click on Create volume
+3. Select Volume type from drop down; in our case, General Purpose SSD (gp3)
+4. Provide the size; in our case it is 2 GiB.
+5. Keep default values of IOPS & Throughput; change if there is specific requirement.
+6. Choose the availability zone.
+7. Optional: choose a snapshot, if creating a volume from previously taken snapshot.
+8. Optional: Provide a tag to personalize if you are considering it as part of any personal project and make it easily identifiable for any automation pipeline.
+9. Click on Create volume at the bottom.
+
+--------------------------------------
+Create volume from AWS CLI/SDK
+--------------------------------------
+
+aws ec2 create-volume --availability-zone us-east-1a --volume-type gp3 --size 2 --tag-specifications 'ResourceType=volume,Tags=[{Key=Name,Value=test-volume}]'
+--encrypted | --no-encrupted provides option to encrypt the volume. This option is disabled by default.
