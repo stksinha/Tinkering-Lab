@@ -1,0 +1,32 @@
+Requirement:  Create a security group under default VPC with 2 rules: 
+1. Inbound rule of type HTTP, with port range of 80. Enter the source CIDR range of 0.0.0.0/0.
+2. Inbound rule of type SSH, with port range of 22. Enter the source CIDR range of 0.0.0.0/0.
+
+==================
+LET'S TINKER
+==================
+Security Group is stateful firewall; that means it monitors the state of active connections. Unlike stateless firewalls (for example, NACL) that inspect each packet individually, stateful firewalls maintain a state table of established connections and use this context to make more intelligent decisions about whether to allow or block incoming and outgoing traffic. This allows them to provide a higher level of security and context-aware filtering. 
+
+There are two approach for creating a security group. We will explore both ways one by one:
+
+----------------------------------------
+Creating security group from AWS console
+----------------------------------------
+1. Go to EC2->Security Groups  or  vpc->Security Groups
+2. Click on Create security group
+3. Fill the security group name and description
+4. Choose the VPC from dropdown (In our case default VPC)
+5. Add the inbound rules as per requirement.
+6. Optional: Provide a tag to personalize if you are considering it as part of any personal project and make it easily identifiable for any automation pipeline.
+7. Click on Create security group at the bottom.
+
+--------------------------------------
+Create security group from AWS CLI/SDK
+--------------------------------------
+> Get default VPC Id :  aws ec2 describe-vpcs --region us-east-1 --filters Name=is-default,Values=true --query "Vpcs[*].VpcId"
+> Create security group : aws ec2 create-security-group --description "Test security group" --group-name test-sg region us-east-1 --vpc-id {{ vpc_id }}
+> Describe security group: aws ec2 describe-security-groups --group-ids {{ security group id }} --region us-east-1
+> Create http inbound rule: aws ec2 authorize-security-group-ingress --group-id {{ security group id }} --protocol tcp --port 80 --cidr 0.0.0.0/0 --region us-east-1
+> Create ssh inbound rule: aws ec2 authorize-security-group-ingress --group-id {{ security group id }} --protocol tcp --port 22 --cidr 0.0.0.0/0 --region us-east-1
+> Delete security group: aws ec2 delete-security-group --group-id {{ security group id }} --region us-east-1 
+or,  aws ec2 delete-security-group --group-name {{ security group name }} --region us-east-1
