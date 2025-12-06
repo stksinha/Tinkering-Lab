@@ -1,0 +1,23 @@
+Requirement: Create a subnet.
+
+==================
+LET'S TINKER
+==================
+
+There are two approach for allocating Elastic IP. We will explore both ways one by one:
+
+----------------------------------
+Allocating Elastic IP from AWS console
+----------------------------------
+1. Go to VPC->Elastic IP addresses
+2. Click on Allocate Elastic IP address
+3. Choose address pool (by default amazon public address pool, you can select other options like BYOIP, customer-owned IPv4 pool, IPAM pool if they are available)
+4. Choose the Network border group. It is same as your zone.
+5. There is a option for Global static address for edge locations as part of Global Accelator. (Not required in our case).
+6. Add required tag and click on Allocate.
+
+--------------------------------------
+Allocate Elastic IP from AWS CLI/SDK
+--------------------------------------
+
+aws ec2 allocate-address --domain vpc --tag-specifications 'ResourceType=elastic-ip,Tags=[{Key=Name,Value=test-eip}]'
