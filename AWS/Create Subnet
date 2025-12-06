@@ -1,0 +1,24 @@
+Requirement: Create a subnet.
+
+==================
+LET'S TINKER
+==================
+
+
+There are two approach for creating a subnet. We will explore both ways one by one:
+
+----------------------------------
+Creating subnet from AWS console
+----------------------------------
+1. Go to VPC->Subnet
+2. Click on Create subnet.
+3. Choose the vpc from the dropdown.
+4. Provide subnet name.
+5. Choose the availability zone. If the VPC is not default VPC, it will by default takes the availability zone of the VPC.
+6. Choose the IPv4 CIDR block. Keep in mind this CIDR block should be inside the VPC CIDR block range.
+7. Click on Create subnet at the bottom.
+
+--------------------------------------
+Create subnet from AWS CLI/SDK
+--------------------------------------
+aws ec2 create-subnet --vpc-id vpc-04a0b15e14c42d059 --cidr-block {{subnet_cidr}} ----availability-zone us-east-1a --tag-specifications 'ResourceType=subnet,Tags=[{Key=Name,Value=test-subnet}]'
