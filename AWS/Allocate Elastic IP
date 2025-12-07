@@ -21,3 +21,4 @@ Allocate Elastic IP from AWS CLI/SDK
 --------------------------------------
 
 aws ec2 allocate-address --domain vpc --tag-specifications 'ResourceType=elastic-ip,Tags=[{Key=Name,Value=test-eip}]'
+Get elastic Ip addresses=> aws ec2 describe-addresses
