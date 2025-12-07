@@ -5,15 +5,70 @@ Launch EC2 instance, Change EC2 Instance Type, Enable Stop Protection for EC2 In
 LET'S TINKER
 ==================
 
-There are two approach for creating a subnet. We will explore both ways one by one:
-
 ----------------------------------
 Configuring EC2 from AWS console
 ----------------------------------
+====================
+Launch EC2 instance
+====================
 1. Go to EC2->Instances
 2. Click on Launch an instance.
 3. Provide a instance name, choose required AMI(Amazon Machine Image), select Instance type as per requiremnet.
 4. Select Existing keypair/Create new Keypair for securely connecting the instance. 
 5. Then select the VPC, Subnet, Enable Auto-assign public IP if required, Select Existing Security Group or Create Security Group for the instance.
 6. Provide the required storage or keep the default value (8 GiB gp3) and then Click on Launch Instance.
-N.B. There are some advanced parameters can be explored like Joining to AD directory, Attaching IAM profile/role, Auto-recovery, 
+N.B. There are some advanced parameters can be explored like Joining to AD directory, Attaching IAM profile/role, Auto-recovery, Shutdown behavior, Hibernate behavior, Stop Protection, Termination Protection and many other options.
+
+=========================
+Change EC2 Instance Type
+=========================
+1. Go to EC2->Instances and wait for the instance status check to be completed (Not in initialized state).
+2. Then stop the instance and wait for it to be in stopped state. (The instance needs to be stopped as changing instance type will need the hardware configueration reallocation)
+3. Once stooped, click on Actions->Instance settings->Change instance type and select the new instance type as per your requirement and click on 'Change instance type' at the bootom.
+4. Start the instance.
+
+=========================
+Enable Stop Protection for EC2 Instance
+=========================
+1. Go to EC2->Instances and select the instance you want to enable Stop protection.
+2. Click on Actions->Instance settings->Change stop protection
+3. Check the box for Enable and save.
+
+=========================
+Enable Termination Protection for EC2 Instance
+=========================
+1. Go to EC2->Instances and select the instance you want to enable Termination protection.
+2. Click on Actions->Instance settings->Change termination protection
+3. Check the box for Enable and save.
+
+--------------------------------
+Configuring EC2 from AWS CLI/SDK
+--------------------------------
+====================
+Launch EC2 instance
+====================
+1. Create keypair if required==> aws ec2 create-key-pair --key-name {{ keypair_name}} --region us-east-1 --key-type rsa --key-format pem
+2. Launch instance==> aws ec2 run-instances --image-id {{ ami-id }} --count 1 --instance-type t2.micro --region us-east-1 --key-name datacenter-kp
+3. Get the instance status of newly launched instance==> aws ec2 describe-instance-status --instance-ids {{ instance_id }}
+4. Provide name of the instance: aws ec2 create-tags --resources {{ instance_id }} --tags Key=Name,Value=test-ec2
+
+=========================
+Change EC2 Instance Type
+=========================
+1. Stop the instance==> aws ec2 stop-instances --instance-ids {{ instance_id }}
+2. Get the instance status==> aws ec2 describe-instance-status --instance-ids {{ instance_id }}
+3. Modify the instance type==> aws ec2 modify-instance-attribute --instance-id {{ instance_id }} --instance-type t2.nano --region us-east-1
+4. Start the instance==> aws ec2 start-instances --instance-ids {{ instance_id }}
+5. Get the instance status==> aws ec2 describe-instance-status --instance-ids {{ instance_id }}
+
+=========================
+Enable Stop Protection for EC2 Instance
+=========================
+ aws ec2 modify-instance-attribute --instance-id {{ instance_id }} --disable-api-stop
+
+=========================
+Enable Termination Protection for EC2 Instance
+=========================
+ aws ec2 modify-instance-attribute --instance-id {{ instance_id }} --disable-api-termination
+
+
