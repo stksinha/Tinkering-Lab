@@ -1,5 +1,5 @@
 Requirement: 
-Launch EC2 instance, Change EC2 Instance Type, Enable Stop Protection for EC2 Instance, Enable Termination Protection for EC2 Instance, Attach Elastic IP to EC2 Instance, Attach Elastic Network Interface to EC2 Instance, Attach Volume to EC2 Instance, Create AMI from EC2 Instance, Terminate EC2 Instance, Create Volume Snapshot
+Launch EC2 instance, Change EC2 Instance Type, Enable Stop Protection for EC2 Instance, Enable Termination Protection for EC2 Instance, Attach Elastic IP to EC2 Instance, Attach Elastic Network Interface to EC2 Instance, Attach Volume to EC2 Instance, Create AMI from EC2 Instance, Terminate EC2 Instance
 
 ==================
 LET'S TINKER
@@ -41,6 +41,42 @@ Enable Termination Protection for EC2 Instance
 2. Click on Actions->Instance settings->Change termination protection
 3. Check the box for Enable and save.
 
+=========================
+Attach Elastic IP to EC2 Instance
+=========================
+1. Go to VPC->Elastic IP addresses
+2. Select the Elastic IP and click on Actions->Associate Elastic Ip Address.
+3. Choose the ec2 instance and click on Associate at the bottom.
+
+=========================
+Attach Elastic Network Interface to EC2 Instance
+=========================
+1. Go to EC2->Network interfaces
+2. Select the network interface and click on Actions->Attach.
+3. Choose the ec2 instanceand click on Attach. It will provide another private IP address.
+
+=========================
+Attach Volume to EC2 Instance
+=========================
+1. Go to EC2->Elastic Block Store->Volumes
+2. Select the volume and click on Actions->Attach volume
+3. Select the instance and Device name (Recommended device names for Linux: /dev/xvda for root volume. /dev/sd[f-p] for data volumes.). Then click on 'Attach volume' at the bottom.
+
+=========================
+Create AMI from EC2 Instance
+=========================
+1. Go to EC2->Instances and select the instance.
+2. Click on Actions->Image and templates->Create image.
+3. Provide the Image name and description(optional), check the box for reboot of instance for data consistency(if required) and click on 'Create image'
+4. Go to EC2->Images->AMIs and wait for the status to become Available.
+
+=========================
+Terminate EC2 Instance
+=========================
+1. Go to EC2->Instances and select the instance.
+2. Select the instance and click on Instance state->Terminate(delete) instance.
+3. Click on Terminate(delete). (There is a option for Skip OS shutdown, which will skip the graceful OS shutdown process and used during emergency or failover).
+
 --------------------------------
 Configuring EC2 from AWS CLI/SDK
 --------------------------------
@@ -71,4 +107,38 @@ Enable Termination Protection for EC2 Instance
 =========================
  aws ec2 modify-instance-attribute --instance-id {{ instance_id }} --disable-api-termination
 
+=========================
+Attach Elastic IP to EC2 Instance
+=========================
+aws ec2 associate-address --instance-id {{ instance_id }} --allocation-id {{ elastic_ip_allocation_id }}
+
+=========================
+Attach Elastic Network Interface to EC2 Instance
+=========================
+1. Get the instance id=> aws ec2 describe-instances --filters "Name=tag:Name,Values=devops-ec2" --query "Reservations[*].Instances[*].InstanceId"
+2. Get the network interface id=> aws ec2 describe-network-interfaces --filters "Name=tag:Name,Values=devops-eni" --query "NetworkInterfaces[*].NetworkInterfaceId"
+3. Attach the eni to instance=> aws ec2 attach-network-interface --instance-id {{ instance_id }} --network-interface-id {{ network_interface_id }} --device-index 1
+
+=========================
+Attach Volume to EC2 Instance
+=========================
+1. Get the instance id=> aws ec2 describe-instances --filters "Name=tag:Name,Values=devops-ec2" --query "Reservations[*].Instances[*].InstanceId"
+2. Get the volume id=> aws ec2 describe-volumes --filters "Name=tag:Name,Values=devops-volume" --query "Volumes[*].VolumeId"
+3. Attach volume to instance=> aws ec2 attach-volume --instance-id {{ instance_id }} --volume-id {{ volume_id }} --device {{ device_name }} 
+#################################
+Recommended device names for Linux: /dev/xvda for root volume. /dev/sd[f-p] for data volumes.
+#################################
+
+=========================
+Create AMI from EC2 Instance
+=========================
+1. Get the instance id=> aws ec2 describe-instances --filters "Name=tag:Name,Values=devops-ec2" --query "Reservations[*].Instances[*].InstanceId"
+2. Create AMI of the instance=> aws ec2 create-image --name devops-ec2-ami --instance-id {{ instance_id }}
+3. Get the AMI status (Wait till it is in available state)=> aws ec2 describe-images --image-ids {{ ami_id }} --query "Images[*].State"
+
+=========================
+Terminate EC2 Instance
+=========================
+1. Get the instance id=> aws ec2 describe-instances --filters "Name=tag:Name,Values=devops-ec2" --query "Reservations[*].Instances[*].InstanceId"
+2. Terminate the instance=> aws ec2 terminate-instances --instance-ids {{ instance_id }}
 
