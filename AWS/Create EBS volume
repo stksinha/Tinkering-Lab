@@ -1,4 +1,4 @@
-Requirement: Create a gp3 volume with size 2GiB.
+Requirement: Create a gp3 volume with size 2GiB,  Create Volume Snapshot
 
 ==================
 LET'S TINKER
@@ -9,6 +9,9 @@ There are two approach for creating a EBS volume. We will explore both ways one 
 ----------------------------------
 Creating volume from AWS console
 ----------------------------------
+=========================
+Create Volume
+=========================
 1. Go to EC2->Elastic Block Store->Volumes
 2. Click on Create volume
 3. Select Volume type from drop down; in our case, General Purpose SSD (gp3)
@@ -19,10 +22,19 @@ Creating volume from AWS console
 8. Optional: Provide a tag to personalize if you are considering it as part of any personal project and make it easily identifiable for any automation pipeline.
 9. Click on Create volume at the bottom.
 
+=========================
+Create Volume Snapshot
+=========================
+1. Go to EC2->Elastic Block Store->Volumes and select the volume.
+2. Click on Actions->Create snapshot. 
+3. Provide the description and tag and click on 'Create snapshot' at the bottom.
+4. Go to EC2->Elastic Block Store->Snapshots and wait for the snapshot status to become 'Completed'
 --------------------------------------
 Create volume from AWS CLI/SDK
 --------------------------------------
-
+=========================
+Create Volume
+=========================
 aws ec2 create-volume --availability-zone us-east-1a --volume-type gp3 --size 2 --tag-specifications 'ResourceType=volume,Tags=[{Key=Name,Value=test-volume}]'
 
 ##############################################################################################################################################################
@@ -32,3 +44,9 @@ Encryption option is available in AWS console,
 2. existing volume can be encrypted by first creating an encrypted volume snapshot and creating a volume from the snapshot
 3. or enabled account level encryption EC2 dashboard settings-> Data protection and security.
 ###############################################################################################################################################################
+
+=========================
+Create Volume Snapshot
+=========================
+1. Get the volume id=> aws ec2 describe-volumes --filters "Name=tag:Name,Values=test-volume" --query "Volumes[*].VolumeId"
+2. Create volume snapshot=> aws ec2 create-snapshot --volume-id {{ volume_id }} --tag-specifications "ResourceType=snapshot,Tags=[{Key=Name,Value=test-vol-ss}]" --description "test Snapshot"
