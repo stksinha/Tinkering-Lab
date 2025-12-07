@@ -1,0 +1,19 @@
+Requirement: 
+Launch EC2 instance, Change EC2 Instance Type, Enable Stop Protection for EC2 Instance, Enable Termination Protection for EC2 Instance, Attach Elastic IP to EC2 Instance, Attach Elastic Network Interface to EC2 Instance, Attach Volume to EC2 Instance, Create AMI from EC2 Instance, Terminate EC2 Instance, Create Volume Snapshot
+
+==================
+LET'S TINKER
+==================
+
+There are two approach for creating a subnet. We will explore both ways one by one:
+
+----------------------------------
+Configuring EC2 from AWS console
+----------------------------------
+1. Go to EC2->Instances
+2. Click on Launch an instance.
+3. Provide a instance name, choose required AMI(Amazon Machine Image), select Instance type as per requiremnet.
+4. Select Existing keypair/Create new Keypair for securely connecting the instance. 
+5. Then select the VPC, Subnet, Enable Auto-assign public IP if required, Select Existing Security Group or Create Security Group for the instance.
+6. Provide the required storage or keep the default value (8 GiB gp3) and then Click on Launch Instance.
+N.B. There are some advanced parameters can be explored like Joining to AD directory, Attaching IAM profile/role, Auto-recovery, 
