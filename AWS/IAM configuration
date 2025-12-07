@@ -1,0 +1,142 @@
+Requirement:
+Create IAM User, Create IAM Group, Create Read-Only IAM Policy for EC2 Console Access, Attach IAM Policy to IAM User, Create IAM Role for EC2 with Policy Attachment, Delete IAM Group, Delete IAM Role
+
+==================
+LET'S TINKER
+==================
+
+----------------------------------
+Configuring IAM from AWS console
+----------------------------------
+======================
+Create IAM User
+======================
+1. Go to IAM->Users and click on 'Create user'
+2. Provide the user name and click Next.
+3. Provide permissions like directly attaching policies, add user to a group, copy permissions from existing user.
+4. Review all the details and click on 'Create user' at the bottom.
+
+======================
+Create IAM Group
+======================
+1. Go to IAM->User groups and click on 'Create group'
+2. Provide the group name, select users to be added in the group(optional, can be done later), select permission policies to be attached(optional,, can be done later) and click on 'Create user group' at the bottom.
+
+======================
+Create Read-Only IAM Policy for EC2 Console Access
+======================
+1. Go to IAM->Policies and click on 'Create policy'
+2. Select the necessary permissions( e.g. allow read-only access to the EC2 console, i.e this policy must allow users to view all instances, AMIs, and snapshots in the Amazon EC2 console) and click on Next.
+3. Provide the policy name and click on 'Create policy' at the bottom.
+
+======================
+Attach IAM Policy to IAM User
+======================
+1. Go to IAM->Policies and select the policy.
+2. Click on Actions->Attach, select the user and click on 'Attach Policy' at the bottom.
+
+======================
+Create IAM Role for EC2 with Policy Attachment
+======================
+1. Go to IAM->Roles and click on 'Create role'.
+2. Select the Trusted Entity type as per requirement (like AWS Service for Service related, AWS Account for account related, Web Identity for external identy, SAML for corporate directory, Custom) and choose the Use case as per requirement (EC2 for our case) and click on Next.
+3. Choose the policy to be attached with role and click Next.
+4. Provide a Role name, review all details and click on 'Create role' at the bottom.
+
+======================
+Delete IAM Group
+======================
+1. Go to IAM->User groups and select the IAM group to be deleted.
+2. Click on Delete, confirm the deletion and click on Delete.
+
+======================
+Delete IAM Role
+======================
+1. Go to IAM->Roles and select the role to be deleted.
+2. Click on Delete, confirm the deletion and click on Delete.
+
+
+
+----------------------------------
+Configuring IAM from AWS CLI/SDK
+----------------------------------
+======================
+Create IAM User
+======================
+aws iam create-user --user-name iamuser_test
+
+======================
+Create IAM Group
+======================
+aws iam create-group --group-name iamgroup_test
+
+======================
+Create Read-Only IAM Policy for EC2 Console Access
+======================
+aws iam create-policy --policy-name iampolicy_test --policy-document file://test-policy.json --region us-east-1
+
+##############
+test-policy.json
+
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "ec2:Get*",
+                "ec2:List*"
+            ],
+            "Resource": [
+                "*"
+            ]
+        }
+    ]
+}
+
+###############
+
+======================
+Attach IAM Policy to IAM User
+======================
+1. Get the user details=> aws iam get-user --user-name iamuser_test / aws iam list-users --query "Users[?UserName=='iamuser_test']"
+2. Get the policy details=> aws iam get-policy --policy-arn <PolicyARN> / aws iam list-policies --query "Policies[?PolicyName=='iampolicy_test']" / aws iam list-policies --query "Policies[?starts_with(PolicyName, 'iampolicy')]"
+3. Attach policy ARN with user=> aws iam attach-user-policy --user-name iamuser_test --policy-arn arn:aws:iam::xxxxxxx:policy/iampolicy_test
+
+======================
+Create IAM Role for EC2 with Policy Attachment
+======================
+1. Get the policy details=> aws iam get-policy --policy-arn <PolicyARN> / aws iam list-policies --query "Policies[?PolicyName=='iampolicy_test']" / aws iam list-policies --query "Policies[?starts_with(PolicyName, 'iampolicy')]"
+2. Create the trust policy json file
+##########################
+test-trust-policy.json
+
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "sts:AssumeRole"
+            ],
+            "Principal": {
+                "Service": [
+                    "ec2.amazonaws.com"
+                ]
+            }
+        }
+    ]
+}
+###############################
+3. Create the role with trusted entity=> aws iam create-role --role-name iamrole_test --assume-role-policy-document file://test-trust-policy.json
+4. Attach the policy with the role=> aws iam attach-role-policy --role-name iamrole_test --policy-arn arn:aws:iam::xxxxxxxxx:policy/iampolicy_test
+
+======================
+Delete IAM Group
+======================
+aws iam delete-group --group-name iamgroup_test
+
+======================
+Delete IAM Role
+======================
+aws iam delete-role --role-name iamrole_test
