@@ -1,0 +1,101 @@
+Requirement:
+Create Private S3 Bucket, Create Public S3 Bucket, Enable Versioning for S3 Bucket, Transfer Data to Existing S3 Bucket, Copy data and Delete S3 Bucket
+
+==================
+LET'S TINKER
+==================
+
+----------------------------------
+Configuring S3 from AWS console
+----------------------------------
+====================
+Create Private S3 Bucket
+====================
+1. Go to S3->Buckets and click on Create bucket.
+2. Check for correct region, select the Bucket type (Default is General purpose which allows a mix of storage classes that redundantly store objects across multiple Availability Zones. Other option is Directory which is low latency use-case for S3 express Single AZ).
+3. Provide the bucket name and select the Bucket ownership. (There is option for copy an existing bucket).
+4. By default Public access to bucket is blocked i.e S3 buckets are private by default.
+5. By default Bucket versioning is disabled.
+6. Provide Tag if required, select encryption method, enable Object Lock in advanced settings if required and then click on 'Create bucket' at the bottom.
+
+====================
+Create Public S3 Bucket
+====================
+1. Go to S3->Buckets and click on Create bucket.
+2. Check for correct region, select the Bucket type (Default is General purpose which allows a mix of storage classes that redundantly store objects across multiple Availability Zones. Other option is Directory which is low latency use-case for S3 express Single AZ).
+3. Provide the bucket name and select the Bucket ownership. (There is option for copy an existing bucket).
+4. By default Public access to bucket is blocked i.e S3 buckets are private by default. Uncheck the box for public access.
+5. By default Bucket versioning is disabled.
+6. Provide Tag if required, select encryption method, enable Object Lock in advanced settings if required and then click on 'Create bucket' at the bottom.
+
+====================
+Enable Versioning for S3 Bucket
+====================
+1. Go to S3->Buckets and click on the requird bucket.
+2. Go to Properties and click on Edit in the Bucket Versioning, Enable the versioning and click on 'Save Changes'
+
+====================
+Transfer Data to Existing S3 Bucket
+====================
+1. Go to S3->Buckets and click on the requird bucket.
+2. Click on Upload, then click on Add folder/Add files.
+3. Choose the files/folders to be uploaded and click on 'Upload' at the bottom.
+
+==================== 
+Copy data and Delete S3 Bucket
+====================
+1. Go to S3->Buckets and click on the requird bucket.
+2. Select the files which you want to move from s3 bucket and click on download.
+3. Once bucket is empty, go to S3->Buckets and select the bucket you want to delete.
+4. Click on Delete, confirm the bucket name and click on 'Delete bucket'
+
+----------------------------------
+Configuring S3 from AWS CLI/SDK
+----------------------------------
+====================
+Create Private S3 Bucket
+====================
+Create S3 bucket=> aws s3api create-bucket --bucket test-s3-4321 --region us-east-1
+Get list of s3 buckets=> aws s3 ls
+
+====================
+Create Public S3 Bucket
+====================
+Create S3 bucket=> aws s3api create-bucket --bucket test-s3-4321 --region us-east-1
+Enable public access=> aws s3api delete-public-access-block --bucket test-s3-4321 --region us-east-1
+
+##################################################
+By default public access is blocked to S3 bucket and below are the parameters:
+{
+    "PublicAccessBlockConfiguration": {
+        "BlockPublicAcls": true,
+        "IgnorePublicAcls": true,
+        "BlockPublicPolicy": true,
+        "RestrictPublicBuckets": true
+    }
+}
+
+Now we can enable some of the public access also like below:
+
+aws s3api put-public-access-block --bucket test-s3-4321 --public-access-block-configuration "BlockPublicAcls=true,IgnorePublicAcls=false,BlockPublicPolicy=true,RestrictPublicBuckets=false"
+##################################################
+
+====================
+Enable Versioning for S3 Bucket
+====================
+Find out the S3 bucket name=> aws s3 ls
+Enable Versioning=> aws s3api put-bucket-versioning --bucket test-s3-4321 --versioning-configuration Status=Enabled --region us-east-1
+
+====================
+Transfer Data to Existing S3 Bucket
+====================
+Find out the S3 bucket name=> aws s3 ls
+Copy file from local=> aws s3 cp /tmp/test.txt s3://test-s3-4321
+
+====================
+Copy data and Delete S3 Bucket
+====================
+Find out the S3 bucket name=> aws s3 ls
+Sync all data from S3 bucket to local=> aws s3 sync s3://test-s3-4321 /opt/ --region us-east-1
+Delete all the contents in s3 bucket=> aws s3 rm s3://test-s3-4321 --recursive --region us-east-1
+Delete the bucket=> aws s3 rb s3://test-s3-4321 --region us-east-1
