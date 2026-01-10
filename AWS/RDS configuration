@@ -1,0 +1,82 @@
+Requirement:
+Create Publicly Accessible RDS Instance, Create Snapshot of RDS Instance, Enable Delete Protection for RDS Instance, Upgrade RDS MySQL Engine Version, Delete RDS Instance
+
+==================
+LET'S TINKER
+==================
+
+----------------------------------
+Configuring RDS from AWS console
+----------------------------------
+====================
+Create Publicly Accessible RDS Instance
+====================
+1. Go to Aurora and RDS ->Databases and click on 'Create Database'.
+2. Select 'Full configuration' for full control of database configuration or 'Easy Create' for recommended configuration. Then choose the database engine type as per requirement (I have chosen MySQL).
+3. Select the database engine version (from me, it is MySQL 8.4.5) and choose the template from Production, Dev/Test & Free Tier.(Type of available instances are dependent on the template). I am going with free tier.
+4. Next is Availability & Durability. For free tier, only single-AZ deployment is available. For other template Multi-AZ DB cluster and DB instance available.
+5. Provide the DB name, DB credentials like username & password and choose the instance (for me, db.t3.micro).
+6. Select the storage type and provide the storage value as per requirement. Additional storage configuration incliudes Autoscaling of storage upto certain limit.
+7. Choose Compute resource, Network type, VPC, DB Subnet group as per requirement and select Public access 'Yes' for Publicly accessible RDS instance.
+8. Choose VPC Security Group, Availability zone, database authentication, monitoring as per requirement and click on 'Create database' at the bottom.
+9. Wait for some time to get it in Available state.
+
+====================
+Create Snapshot of RDS Instance
+====================
+1. Go to Aurora and RDS ->Databases and select the database and click on Actions->Take snapshot
+2. Select the Snapshot type like instance or cluster and choose the instance.
+3. Provide a name of the snapshot and click on 'Take snapshot'
+4. Wait for some time to get it in Available state in Aurora and RDS ->Snapshots.
+
+====================
+Enable Delete Protection for RDS Instance
+====================
+1. Go to Aurora and RDS ->Databases and select the database and click on Modify.
+2. Go to Additional Configuration at the bottom and tick the 'Enable deletion protection box'. 
+3. Click on Continue at the bottom and choose Schedule modifications (apply the modifications immediately or during next scheduled maintenance window) and click on 'Modify DB instance'.
+
+====================
+Upgrade RDS MySQL Engine Version
+====================
+1. Go to Aurora and RDS ->Databases and select the database and click on Modify.
+2. Choose the new engine version and click on Continue at the bottom.
+3. Choose Schedule modifications (apply the modifications immediately or during next scheduled maintenance window) and click on 'Modify DB instance'.
+4. Wait for some time to get it in Available state.
+
+====================
+Delete RDS Instance
+====================
+1. Go to Aurora and RDS ->Databases and select the database and click on Actions->Delete.
+2. Confirm deletion and click on Delete. (Uncheck the 'Create final snapshot' if not required before delete, else it will create a final snapshot before deletion; also uncheck the 'Retain automated backups' if not required as it is chargable for retaining the backups for 1 day post deletion; for these you need check the box for acknowledgement for not backup retention)
+
+----------------------------------
+Configuring S3 from AWS CLI/SDK
+----------------------------------
+====================
+Create Publicly Accessible RDS Instance
+====================
+aws rds create-db-instance --db-instance-identifier test-rds --engine mysql --engine-version 8.4.5 --db-instance-class db.t3.micro --storage-type gp2 --allocated-storage 5 --master-username {{ username }} --master-user-password {{ password }} --publicly-accessible --region us-east-1 
+####################################################################
+(--availability-zone can be used in place of --region for stict zoning)
+####################################################################
+
+====================
+Create Snapshot of RDS Instance
+====================
+aws rds create-db-snapshot --db-instance-identifier test-rds --db-snapshot-identifier test-rds-snapshot --region us-east-1
+
+====================
+Enable Delete Protection for RDS Instance
+====================
+aws rds modify-db-instance --db-instance-identifier test-rds --deletion-protection --apply-immediately --region us-east-1
+
+====================
+Upgrade RDS MySQL Engine Version
+====================
+aws rds modify-db-instance --db-instance-identifier test-rds --engine-version 8.4.5 --apply-immediately --region us-east-1
+
+====================
+Delete RDS Instance
+====================
+aws rds delete-db-instance --db-instance-identifier test-rds --region us-east-1 --skip-final-snapshot
