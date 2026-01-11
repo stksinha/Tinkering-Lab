@@ -1,0 +1,54 @@
+Requirement:
+Create VPC, Define VPC CIDR, Implement VPC IPv6, Delete VPC
+
+==================
+LET'S TINKER
+==================
+
+----------------------------------
+Configuring VPC from AWS console
+----------------------------------
+====================
+Create VPC
+====================
+1. Go to VPC->Your VPCs and click on 'Create VPC'.
+2. Select 'VPC only'. (Other option is 'VPC and more' which enables more networking related configuration like no. of AZ, no. of subnet etc.)
+3. Provide the VPC name and provide the IPv4 CIDR for the VPC. (There are options for providing IPv6 range, selecting IPAM pool to auto-allocate IPv4 CIDR from the pool).
+4. Select tenancy and VPC encryption control as per requirement and click on 'Create VPC' at the bottom.
+
+====================
+Implement VPC IPv6
+====================
+1.  Go to VPC->Your VPCs and click on 'Create VPC'.
+2. Select 'VPC only'. (Other option is 'VPC and more' which enables more networking related configuration like no. of AZ, no. of subnet etc.)
+3. Provide the VPC name and provide both IPv4 (mandatory) and the IPv6 CIDR for the VPC. (There are options for providing BYOIP IPv6 CIDR, selecting IPAM pool to auto-allocate IPv6 CIDR from the pool, Amzon provided IPv6 CIDR). I have selected Amazon provided IPv6 CIDR (fixed /56 block) and for this network border-group will be selected.
+4. Select tenancy and VPC encryption control as per requirement and click on 'Create VPC' at the bottom.
+
+====================
+Delete VPC
+====================
+1.  Go to VPC->Your VPCs, select the vpc and click on Actions-> Delete VPC.
+2. Confirm and click on 'Delete'
+3. Wait for some time to get it deleted.
+
+----------------------------------
+Configuring VPC from AWS CLI/SDK
+----------------------------------
+====================
+Create VPC
+====================
+Create VPC=> aws ec2 create-vpc --cidr-block 10.31.0.0/16 --region us-east-1 --tag-specifications 'ResourceType=vpc,Tags=[{Key=Name,Value=test-vpc}]'
+Get the status of created VPC=> aws ec2 describe-vpcs --filters "Name=tag:Name,Values=test-vpc"
+
+====================
+Implement VPC IPv6
+====================
+Create VPC=> aws ec2 create-vpc --amazon-provided-ipv6-cidr-block --ipv6-cidr-block-network-border-group us-east-1 --region us-east-1 --tag-specifications 'ResourceType=vpc,Tags=[{Key=Name,Value=test-vpc}]' --cidr-block 10.31.0.0/16
+Get the status of created VPC=> aws ec2 describe-vpcs --filters "Name=tag:Name,Values=test-vpc"
+
+====================
+Delete VPC
+====================
+Get the VPC Id for the deletion=> aws ec2 describe-vpcs --filters "Name=tag:Name,Values=test-vpc" --query "Vpcs[*].VpcId"
+Delete the VPC=> aws ec2 delete-vpc --vpc-id {{ VPC Id }} --region us-east-1
+Get the status of created VPC=> aws ec2 describe-vpcs --filters "Name=tag:Name,Values=test-vpc"
