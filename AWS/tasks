@@ -8,7 +8,6 @@ Create IAM User, Create IAM Group, Create Read-Only IAM Policy for EC2 Console A
 Create Private S3 Bucket, Create Public S3 Bucket, Enable Versioning for S3 Bucket, Transfer Data to Existing S3 Bucket, Copy and Delete S3 Bucket Data
 Create Publicly Accessible RDS Instance, Create Snapshot of RDS Instance, Enable Delete Protection for RDS Instance, Upgrade RDS MySQL Engine Version, Delete RDS Instance
 Create VPC, Define VPC CIDR, Implement VPC IPv6, Delete VPC
-Create Private S3 Bucket via AWS CLI, Launch EC2 Instance via AWS CLI, Modify EC2 Instance Type via AWS CLI, Delete EC2 Instance via AWS CLI
 Setting Up an EC2 Instance with an Elastic IP for Application Hosting
 Expanding EC2 Instance Storage for Development Needs
 Creating and Launching EC2 Instances from Custom AMIs
