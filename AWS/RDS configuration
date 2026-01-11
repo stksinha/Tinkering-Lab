@@ -51,7 +51,7 @@ Delete RDS Instance
 2. Confirm deletion and click on Delete. (Uncheck the 'Create final snapshot' if not required before delete, else it will create a final snapshot before deletion; also uncheck the 'Retain automated backups' if not required as it is chargable for retaining the backups for 1 day post deletion; for these you need check the box for acknowledgement for not backup retention)
 
 ----------------------------------
-Configuring S3 from AWS CLI/SDK
+Configuring RDS from AWS CLI/SDK
 ----------------------------------
 ====================
 Create Publicly Accessible RDS Instance
