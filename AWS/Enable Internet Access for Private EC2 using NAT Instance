@@ -1,0 +1,32 @@
+The requiremnet is to enable Internet Access for Private EC2 using NAT Instance
+
+Taking in consideration, a VPC (test-vpc), private subnet (test-priv-subnet), private instance (test-priv-ec2) running in private subnet.
+1.	Create a public subnet: Create a public subnet (test-pub-subnet) in the VPC.
+2.	Create an internet gateway and attach to the VPC: Create an internet gateway and attach to the VPC. Add another route to 0.0.0.0/0 through internet gateway in the route table of public subnet. Attach explicitly public subnet to route-table.
+3.	Create a NAT security group: Create a security group (nat-sg) and add inbound rule for connection from private subnet.
+4.	Create a NAT instance: If NAT AMI is present, that can be used. If not present, create an instance with Amazon linux AMI in already created public subnet with already created security group.
+5.	Disable source/destination check of the NAT instance: Stop source/destination check from Actions-> Change source/destination check.
+6.	Add route in private subnet route table: Add another route 0.0.0.0/0 through NAT instance in Private Subnet Route Table.
+7.	Configure OS to configure newly created instance as proper NAT instance: 
+###############################################################################################
+#!/bin/bash
+# Update the system
+yum update -y
+
+# Enable IPv4 Forwarding in the kernel
+echo "net.ipv4.ip_forward = 1" >> /etc/sysctl.conf
+sysctl -p
+
+# Determine the primary network interface (usually eth0)
+PRIMARY_IF=$(ip route | grep default | awk '{print $5}')
+
+# Configure iptables to Masquerade traffic from the private subnet
+# This allows the instance to translate internal IPs to its public IP
+yum install iptables-services -y
+systemctl enable iptables
+systemctl start iptables
+
+# Apply the NAT rule
+iptables -t nat -A POSTROUTING -o $PRIMARY_IF -j MASQUERADE
+service iptables save
+##################################################################################################
