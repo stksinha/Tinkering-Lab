@@ -1,5 +1,14 @@
 Requirement: Create a Lambda Function
 
+==================
+LET'S TINKER
+==================
+There are two approach for creating lambda function. We will explore both ways one by one:
+
+----------------------------------
+Creating lambda function from AWS console
+----------------------------------
+
 1. Go to Lambda->Funtions and click on 'Create function'.
 2. Select 'Author from scratch', provide function name, select Runtime (e.g. Nodejs, python, java, .NET etc.) and click on 'Create function' at the bottom.
 3. Write a test function :
@@ -14,3 +23,10 @@ def lambda_handler(event, context):
 ################################
 4. Deploy and test using a sample test case.
 5. Additionally, attach already existing Lambda role from Configuration and edit it and save the configuration.
+
+----------------------------------
+Creating lambda function from AWS CLI
+----------------------------------
+Write function file and zip the function.
+Get the role for associating with Lambda=> aws iam get-role --role-name lambda_execution_role
+Create function=> aws lambda create-function --function-name nautilus-lambda-cli --zip-file fileb://function.zip --runtime python3.14 --role arn:aws:iam::141357182397:role/lambda_execution_role --region us-east-1 --handler nautilus-lambda-cli.lambda_handler
