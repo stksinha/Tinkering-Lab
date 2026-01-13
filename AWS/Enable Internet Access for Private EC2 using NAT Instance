@@ -1,4 +1,4 @@
-The requirement is to enable Internet Access for Private EC2 using NAT Instance
+Requirement: Enable Internet Access for Private EC2 using NAT Instance
 
 Taking in consideration, a VPC (test-vpc), private subnet (test-priv-subnet), private instance (test-priv-ec2) running in private subnet.
 1.	Create a public subnet: Create a public subnet (test-pub-subnet) in the VPC.
