@@ -30,3 +30,4 @@ Creating lambda function from AWS CLI
 Write function file and zip the function.
 Get the role for associating with Lambda=> aws iam get-role --role-name lambda_execution_role
 Create function=> aws lambda create-function --function-name test-lambda-cli --zip-file fileb://function.zip --runtime python3.14 --role arn:aws:iam::{{AWS account}}:role/lambda_execution_role --region us-east-1 --handler test-lambda-cli.lambda_handler
+Test the lambda function=> aws lambda invoke --function-name test-lambda-cli out.txt
