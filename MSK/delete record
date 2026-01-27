@@ -1,0 +1,16 @@
+kafka-delete-records.sh \
+  --bootstrap-server <BROKER_HOST:PORT> \
+  --offset-json-file delete.json
+###########################
+delete.json
+###########################
+
+
+{
+  "partitions": [
+    { "topic": "my-topic", "partition": 0, "offset": 500 },
+    { "topic": "my-topic", "partition": 1, "offset": 1000 }
+  ],
+  "version": 1
+}
+
