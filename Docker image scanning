@@ -1,0 +1,16 @@
+echo "########################### Monthly Image Scan Report #####################################" > /app/poc/Qscanner/monthly_scanning/scan_report.txt
+. /app/poc/Qscanner/access-token
+docker images | awk '{ print $3}'| tail -n+2 > /app/poc/Qscanner/monthly_scanning/image_list.txt
+while IFS= read -r line; do
+    image_id=$line
+    image_name=`docker images | grep $image_id | awk '{ print $1}'`
+    image_tag=`docker images | grep $image_id | awk '{ print $2}'`
+    echo Scanning started for: $image_name:$image_tag >> /app/poc/Qscanner/monthly_scanning/scan_report.txt
+    /app/poc/Qscanner/qscanner image $image_id --access-token $QUALYS_ACCESS_TOKEN --pod EU1 --proxy $PROXY_URL --report-format table --output-dir /app/poc/Qscanner/monthly_scanning/reports > /app/poc/Qscanner/monthly_scanning/output/report_$image_name-$image_tag.out
+    awk '/vulnerabilities found/ {print}' /app/poc/Qscanner/monthly_scanning/output/report_$image_name-$image_tag.out | awk '{ $1="";$2="";sub(/^+/,"");print }' >> /app/poc/Qscanner/monthly_scanning/scan_report.txt
+    awk '/Severity/ {print}' /app/poc/Qscanner/monthly_scanning/output/report_$image_name-$image_tag.out | awk '{ $1="";$2="";sub(/^+/,"");print }' >> /app/poc/Qscanner/monthly_scanning/scan_report.txt
+    awk '/^\+/ {in_table=1} in_table {print} NF==0 {in_table=0}' /app/poc/Qscanner/monthly_scanning/output/report_$image_name-$image_tag.out >> /app/poc/Qscanner/monthly_scanning/scan_report.txt
+    echo Scanning completed for: $image_name:$image_tag >> /app/poc/Qscanner/monthly_scanning/scan_report.txt
+    echo "###########################################################################################" >> /app/poc/Qscanner/monthly_scanning/scan_report.txt
+done < /app/poc/Qscanner/monthly_scanning/image_list.txt
+mailx -a /app/poc/Qscanner/monthly_scanning/scan_report.txt -S from="Image Scanning <Image.Scanning@hotmail.com>" -s "Monthly Docker Image Scan Report" testUser <test.user@hotmail.com> < /app/poc/Qscanner/monthly_scanning/message.txt
