@@ -1,0 +1,20 @@
+Requirement: Load Balancing EC2 Instances with Application Load Balancer.
+
+==================
+LET'S TINKER
+==================
+
+1. Create a separate security group for your EC2 instance/s; which should include inbound rule from default security group over port 80. (We will use default security group in ALB, if separate security group is created for ALB, then port 80 should be included from that Security Group).
+2. Create a EC2 instance (I have created a free tier ubuntu) and use existing security group created in previous step. Install nginx as part of startup of the instance using user data script.
+
+##########################
+#!/bin/bash
+sudo apt-get update -y
+sudo apt-get install nginx -y
+sudo systemctl start nginx
+###########################
+3. Create a target group: EC2->Target groups->click on 'Create target group'. Select the type of target (for me Instances) and provide a name of the target group. Then select the port & protocol of targets with which load balancer will connect the instances. Select the VPC and click on 'Next'. In the next page, choose the target instance/s and include them 'Include as pending below' and click on next. Review and click on 'Create target group' at the bottom.
+
+4. Now create a ALB: EC2->Load balancers-> click on 'Create load balancer'. Choose ALB and click on 'create'. Provide Load balancer name, choose VPC, Select Availability zone and subnets to used for load balancing, choose security group for ALB, port of alb, choose the existing target group and click on 'Create load balancer' at the bottom.
+
+5. Wait for some time to get the target instances registered and healthy and ALB to be provisioned. Once ready, use the ALB DNS to access the instance. (You may need to add inbound rule for ALB port from over internet in the ALB Security group).
