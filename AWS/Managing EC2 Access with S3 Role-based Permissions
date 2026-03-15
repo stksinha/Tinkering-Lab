@@ -1,0 +1,44 @@
+Requirement: Managing EC2 Access with S3 Role-based Permissions
+
+==================
+LET'S TINKER
+==================
+
+1. Created a EC2 instance. Now this instance requires access to S3 bucket.
+2. Created a private bucket.
+3. Created a IAM policy allowing s3:PutObject, s3:ListBucket and s3:GetObject access to the bucket.
+###########################
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor1",
+            "Effect": "Allow",
+            "Action": [
+                "s3:PutObject",
+                "s3:GetObject",
+                "s3:ListBucket"
+            ],
+            "Resource": [
+                "arn:aws:s3:::test-s3-123456789012",
+                "arn:aws:s3:::test-s3-123456789012/*"
+            ]
+        }
+    ]
+}
+###############################
+*****
+Separate resources are mentioned as "ListBucket" is s3 bucket related permission and "PutObject" & "GetObject" are s3 object related permissions. 
+
+If I put only "arn:aws:s3:::test-s3-123456789012" as resource, it will only identify as Limited List permission for the bucket and object related permissions (GetObject & PutObject) will not be effective.
+
+If I put only "arn:aws:s3:::test-s3-123456789012/*" as resource, it will only identify as Limited Read and Write permission for the bucket objects and bucket related permissions (ListBucket) will not be effective.
+
+*****
+4. Created a IAM role for EC2 and attached the above policy.
+5. Attached the IAM role with the already created EC2 instance.
+6. Now login to the EC2 instance and tried to copy a file to S3 bucket.
+
+
+
+
