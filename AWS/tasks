@@ -26,8 +26,6 @@ Configuring a Public VPC with an EC2 Instance for Internet Access
 Establishing Secure Communication Between Public and Private VPCs via VPC Peering
 Setting Up a Private VPC with an Isolated EC2 Instance
 Create a Lambda Function using AWS console and CLI
-Troubleshooting Internet Accessibility for an EC2-Hosted Application
-Troubleshooting Connectivity Issues for Package Installation on EC2
 Creating a Private ECR Repository
 Configure NAT Gateway for Internet Access in a Private VPC
 ##################################################################################################
