@@ -1,0 +1,78 @@
+Requirement: Securing Data with AWS KMS
+
+==================
+LET'S TINKER
+==================
+
+----------------------------------
+Configuring KMS from AWS console
+----------------------------------
+
+1. Go to KMS->Create Key and choose the key type & key usage and click on Next.
+2. Provide alias of the key for easy identifying.
+3. Choose the Key Administrator and Key usage roles if required. (Optional)
+4. Check the keypolicy and modify if required. (Optional).
+5. Review all the configurations and click on finish. It will create key and provide the key-id.
+
+----------------------------------
+Configuring KMS from CLI
+----------------------------------
+1. Key Creation:
+
+####################
+As symmetric key is default, so providing parameters are optional. For Asymmetric key and other type of keys, additional parameters are required.
+
+aws kms create-key
+
+--------------
+For Asymmetric RSA KMS, it will be as below:
+
+aws kms create-key \
+--key-spec RSA_4096 \
+--key-usage ENCRYPT_DECRYPT
+
+---------------
+For Asymmetric Elliptic Curve KMS key (for signing and verification):
+
+aws kms create-key \
+--key-spec ECC_NIST_P521 \
+--key-usage SIGN_VERIFY
+
+-----------------
+For HMAC KMS:
+
+aws kms create-key \
+--key-spec HMAC_384 \
+--key-usage GENERATE_VERIFY_MAC
+---------------
+
+There are other options for multi-region, cloudHSM, external key-material etc.
+####################
+
+2. By default there is no alias for the key. Need to create alias for the key for easy identification:
+
+#####################
+aws kms create-alias --alias-name alias/test --target-key-id {{ key-id }}
+#####################
+
+3. Encrypt Sensitive data:
+
+######################
+aws kms encrypt \
+--key-id {{ key-id }} \
+--plaintext fileb://SensitiveData.txt \
+--output text \
+--query CiphertextBlob | base64 \
+--decode > EncryptedData.bin
+######################
+
+4. Decrypt Sensitive data:
+
+######################
+aws kms decrypt \
+--ciphertext-blob fileb://EncryptedData.bin \
+--key-id {{ key-id }} \
+--output text \
+--query Plaintext | base64 \
+--decode > testData.txt
+########################
