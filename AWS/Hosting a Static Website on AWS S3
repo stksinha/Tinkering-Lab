@@ -1,0 +1,24 @@
+Requirement: Hosting a Static Website on AWS S3
+==================
+LET'S TINKER
+==================
+
+1. Created a s3 bucket and made it public.
+2. Uploaded an index.html file to s3.
+3. Apply a bucket policy to public get access of the object:
+##########################
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "Statement1",
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::demo-web-5739/*"
+        }
+    ]
+}
+###############################
+4. Go to properties and find static website hosting. Click on Edit and enable the static website hosting. Provide the index document as index.html and click on Save changes.
+5. A Bucket website endpoint URL will be generated. Open the URL in browser to check the hosted static website.
