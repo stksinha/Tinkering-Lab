@@ -1,0 +1,15 @@
+Requirement: Implementing Auto Scaling for High Availability in AWS.
+
+==================
+LET'S TINKER
+==================
+
+1. Go to EC2->Launch templates->Create launch template.
+2. Provide launch template name, select the AMI and instance type, configure security group, provide user data (to be implemented as instance startup e.g. nginx installation) and click on Create launch template.
+3. Once the template is created, go to EC2->Auto Scaling groups->Create Auto Scaling group.
+4. Provide a ASG name, choose the template and click on Next.
+5. Choose the VPC and subnet, attach with new ALB and TG.
+6. Choose desired minimum, maximum capacity.
+7. Select target tracking scaling policy for average CPU utilization at 50%.
+8. Add notification and tags if required.
+9. Review all configurations and click on 'Create Autoscaling group'.
