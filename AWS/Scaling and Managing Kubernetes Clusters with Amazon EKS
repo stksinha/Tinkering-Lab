@@ -1,0 +1,17 @@
+Requirement:
+Scaling and Managing Kubernetes Clusters with Amazon EKS
+
+==================
+LET'S TINKER
+==================
+1. Go to Amazon Elastic Kubernetes Service->Create EKS cluster
+2. There two options for configuration (I have chosen custom configuration.)- 
+  => Quick configuration (Cluster configuration, Networking and Observability are automatically configured; only cluster name, kubernetes version, IAM role, Subnets       need to be selected) 
+  => Custom configuration (All configurations are to selected manually, nothing is default configuration. It provides more control over cluster configuration).
+3. There is option to enable/disable EKS Auto mode.
+    (EKS automates routine cluster tasks for compute, storage, and networking. When a new pod can't fit onto existing nodes, EKS creates a new node. EKS combines         cluster infrastructure managed by AWS with integrated Kubernetes capabilities to meet application compute needs. EKS Auto Mode includes the following                 capabilities: Application load balancing, Block Storage, Compute Autoscaling, GPU support, Cluster DNS, Pod and service networking)
+4. Provide a cluster name, create a cluster IAM role, choose stable kubernetes version and click on 'Next'. (There are some more options present in the page for customization).
+5. Choose the VPC, subnets for high availability, cluster endpoint access (options are: public,public and private,private).
+6. Choose observability as per requirement.
+7. Choose Add-ons and configure them as per requirements.
+8. Review all configurations and click on 'Create'. It will take some time for the cluster to be created and running.
