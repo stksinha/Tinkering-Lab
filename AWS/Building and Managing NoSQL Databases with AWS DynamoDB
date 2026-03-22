@@ -8,3 +8,4 @@ LET'S TINKER
 1. Go to DynamoDB->Tables->Create table.
 2. Provided table name, partition key, sort key(optional and clicked on 'Create table'.
 3. Once table created, added items and values as per requirement.
+4. Then queries can be run to fetch those values.
