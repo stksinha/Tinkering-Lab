@@ -1,0 +1,10 @@
+Requirement:
+Building and Managing NoSQL Databases with AWS DynamoDB
+
+==================
+LET'S TINKER
+==================
+
+1. Go to DynamoDB->Tables->Create table.
+2. Provided table name, partition key, sort key(optional and clicked on 'Create table'.
+3. Once table created, added items and values as per requirement.
