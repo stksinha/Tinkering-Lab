@@ -1,0 +1,12 @@
+Requirement: Configure NAT Gateway for Internet Access in a Private VPC
+
+==================
+LET'S TINKER
+==================
+Lets consider a EC2 instance (demo-priv-ec2) is running over private subnet (demo-priv-subnet) in VPC (demo-priv-vpc). 
+
+1. Create a public subnet (demo-pub-subnet) in the same VPC.
+2. Create a internet-gateway (demo-ig). Once created, attach it to the same VPC by clicking on Actions->Attach to VPC.
+3. Create a route-table (demo-pub-rt) in the same VPC. Once created add a route for destination 0.0.0.0/0 through already created internet-gateway. Then associate with the already created public subnet by clicking on Actions->Edit subnet association.
+4. Create a NAT gateway (demo-natgw) in same VPC. (Elastic IP address can be chosen as Automatic or manual).
+5. Edit the route table for private subnet and add a route for destination 0.0.0.0/0 through already created NAT-gateway.
