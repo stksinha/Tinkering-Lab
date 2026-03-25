@@ -1,0 +1,21 @@
+Requirement: Centralized Audit Logging with VPC Peering
+
+==================
+LET'S TINKER
+==================
+
+1. Created a private VPC, private subnet, private route table. Hosted a private EC2 instance in the private subnet.
+2. Created a public VPC, public subnet, public route table. Hosted a public EC2 instance in the public subnet.
+3. Created a internet gateway and attached to the public VPC. Modified the public route table to send traffic to internet through internet gateway.
+4. Created a peering connection between private and public vpc. Modified both route tables to add peering between VPCs.
+5. Created a S3 bucket to store audit loggin data.
+6. Now login to public EC2 instance. From there login to private EC2 instance with the key created during EC2 instance creation.
+7. Established a SSH connection from private EC2 instance to public EC2 instance. (This is required to send data from private instance to public instance).
+8. Now we can test as below:
+
+Created a cronjob to copy Audit log file to a location in public instance.
+* * * * * scp /var/log/boots.log ubuntu@{{ public instance private ip }}:~/boot/boots.log
+
+Installed aws-cli in public instance. (sudo snap install aws-cli --classic). Created a cronjob to copy the file to S3.
+
+9. Verified that the file is getting copied to S3. (For this purpose, create a role with policy: S3PutObject and attached the role to public instance.)
