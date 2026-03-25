@@ -135,7 +135,7 @@ Resources:
     Type: AWS::Lambda::Function
     Properties:
       FunctionName: demo-priorities-queue-function
-      Runtime: python3.9
+      Runtime: python3.14
       Handler: index.lambda_handler
       Role: !GetAtt LambdaExecutionRole.Arn
       Timeout: 5
