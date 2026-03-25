@@ -1,0 +1,23 @@
+Requirement: Expanding EC2 Instance Storage for Development Needs
+
+==================
+LET'S TINKER
+==================
+
+1. Created a EC2 instance. Lets say it has 8GB instance storage. We need to increase it to 12 GB.
+2. Go to Volumes, select volume and modify it from 8GB to 12GB. Once saved, it will go to optimization state.
+3. Now login to the instance and run below commands to expand the instance storage: (https://docs.aws.amazon.com/ebs/latest/userguide/recognize-expanded-volume-linux.html)
+
+sudo lsblk (to check the partition and we found xvda volume having 12GB size has a partition of xvda1 of size 8GB)
+
+df -Th (We found /dev/xvda1 in type ext4 and mount point is '/ ' with size 8GB)
+
+sudo growpart /dev/xvda 1 (Extend tha partition)
+
+sudo lsblk (we can see that xvda1 partition is extended to 12GB)
+
+df -Th (Though partition is extended, but the filesystem '/' is still showing 8GB)
+
+sudo xfs_growfs -d / (Extend the filesystem '/')
+
+df -Th (We can see that the filesystem '/' is now extended to 12GB)
