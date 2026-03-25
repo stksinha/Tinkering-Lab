@@ -1,0 +1,72 @@
+Requirement: Automating Infrastructure Deployment with AWS CloudFormation
+
+==================
+LET'S TINKER
+==================
+
+We will create a cloud formation template for creating a lambda function.
+
+1. Create cloud formation template:
+
+###############
+AWSTemplateFormatVersion: '2010-09-09'
+Description: demo-lambda-app
+Resources:
+  
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: lambda_execution_role
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+
+  LambdaFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: demo-lambda
+      Runtime: python3.14
+      Handler: index.lambda_handler
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Timeout: 5
+      Code:
+        ZipFile: |
+          def lambda_handler(event, context):
+            message='Welcome to AWS Labs!'
+            return {
+              'statusCode': 200,
+              'body': message
+            }
+##################
+
+2. Now create stack with the cloud formation template:
+
+##################
+
+aws cloudformation create-stack   --stack-name demo-lambda-app   --template-body file:///root/demo-lambda.yml   --capabilities CAPABILITY_NAMED_IAM
+
+#################
+
+3. Now invoke lambda function to test:
+
+###################
+
+aws lambda invoke --function-name demo-lambda output.jso
+
+#################
+
+4. The output.json will show output like below:
+
+#################
+
+{"statusCode": 200, "body": "Welcome to AWS Labs!"}
+
+#################
+
+
