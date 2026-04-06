@@ -1,8 +1,9 @@
 kafka-delete-records.sh \
   --bootstrap-server <BROKER_HOST:PORT> \
   --offset-json-file delete.json
+
 ###########################
-delete.json
+delete-records.json
 ###########################
 
 
