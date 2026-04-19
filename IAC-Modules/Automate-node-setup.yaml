@@ -1,0 +1,23 @@
+---
+- name: Prepare AI Infrastructure Nodes
+  hosts: gpu_nodes
+  become: yes
+  tasks:
+    - name: Install NVIDIA Container Toolkit
+      apt:
+        name: nvidia-container-toolkit
+        state: present
+        update_cache: yes
+
+    - name: Configure Docker to use NVIDIA Runtime
+      shell: nvidia-ctk runtime configure --runtime=docker
+
+    - name: Restart Docker to apply changes
+      systemd:
+        name: docker
+        state: restarted
+
+    - name: Verify GPU availability
+      command: nvidia-smi
+      register: gpu_status
+      failed_when: "'NVIDIA-SMI has failed' in gpu_status.stdout"
