@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: llm-inference-service
+spec:
+  replicas: 3
+  template:
+    spec:
+      containers:
+      - name: llama-3-container
+        image: lenovo-private-registry/llama-3:latest
+        resources:
+          limits:
+            nvidia.com/gpu: 1 # Requesting 1 GPU
+          requests:
+            memory: "16Gi"
+            cpu: "4"
