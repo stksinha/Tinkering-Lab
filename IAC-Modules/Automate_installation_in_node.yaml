@@ -1,0 +1,16 @@
+- name: Prepare AI Infrastructure Nodes
+  hosts: gpu_cluster
+  become: yes
+  tasks:
+    - name: Install NVIDIA Container Toolkit
+      yum:
+        name: nvidia-container-toolkit
+        state: present
+    - name: Ensure Docker is running and enabled
+      systemd:
+        name: docker
+        state: started
+        enabled: yes
+    - name: Apply security patch (Critical Update)
+      shell: "yum update -y --security"
+      when: security_patch_required == true
