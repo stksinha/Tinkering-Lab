@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: llm-training-job
+  namespace: ai-workloads
+spec:
+  replicas: 1
+  template:
+    spec:
+      # Ensures this pod only runs on nodes with GPUs
+      tolerations:
+      - key: "hardware"
+        operator: "Equal"
+        value: "gpu"
+        effect: "NoSchedule"
+      # Prefers nodes with high-performance NVIDIA cards
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: nvidia.com/gpu.family
+                operator: In
+                values:
+                - h100
+      containers:
+      - name: training-container
+        image: lenovo-private-reg.com/ai/llm-base:v1
+        resources:
+          limits:
+            nvidia.com/gpu: 1 # Requesting 1 GPU
+            memory: "32Gi"
+            cpu: "8"
+          requests:
+            nvidia.com/gpu: 1
+            memory: "32Gi" # Guaranteed QoS (Limits = Requests)
+            cpu: "8"
