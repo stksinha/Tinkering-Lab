@@ -11,7 +11,7 @@ if [ -z "$BROKER" ] || [ -z "$TOPIC" ]; then
    exit 1
 fi
 
-echo "Listing acls of '$TOPIC' on broker 'BROKER'..."
+echo "Listing acls of '$TOPIC' on broker '$BROKER'..."
 export KAFKA_HEAP_OPTS="-Xmx1G -Xms512M"
 
 #Listing acls for topics
