@@ -7,7 +7,7 @@ BROKER=$1
 TOPIC=$2
 
 if [ -z "$BROKER" ] || [ -z "$TOPIC" ]; then
-   echo "Usage:$0 <BROKER_HOST:PORT><TOPIC_NAME>"
+   echo "Usage:$0 <BROKER_HOST:PORT> <TOPIC_NAME>"
    exit 1
 fi
 
