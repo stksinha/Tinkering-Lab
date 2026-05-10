@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Usage: ./topic_acl_list.sh <BROKER_HOST:PORT> <TOPIC_NAME>
-# Example: ./topic_list.sh localhost:9092 my-topic
+# Example: ./topic_acl_list.sh localhost:9092 my-topic
 
 BROKER=$1
 TOPIC=$2
