@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Configuration
+KAFKA_PATH="/opt/kafka/kafka"
+CLIENT_CONFIG="$KAFKA_PATH/config/client.properties"
+
 # Usage: ./topic_list.sh <BROKER_HOST:PORT>
 # Example: ./topic_list.sh localhost:9092
 
@@ -10,11 +14,17 @@ if [ -z "$BROKER" ]; then
    exit 1
 fi
 
-echo "Listen topics on broker '$BROKER'..."
+echo "--- Fetching Topic List from '$BROKER' ---"
 export KAFKA_HEAP_OPTS="-Xmx1G -Xms512M"
 
 #Listing topics
 /opt/kafka/kafka/bin/kafka-topics.sh \
 --bootstrap-server "$BROKER" \
 --list \
---command-config /opt/kafka/kafka/config/client.properties
+--command-config "$CLIENT_CONFIG"
+
+# Check if the command was successful
+if [ $? -ne 0 ]; then
+    echo "Error: Could not retrieve topic list. Check your connection/config."
+    exit 1
+fi
