@@ -18,7 +18,7 @@ echo "--- Fetching Topic List from '$BROKER' ---"
 export KAFKA_HEAP_OPTS="-Xmx1G -Xms512M"
 
 #Listing topics
-/opt/kafka/kafka/bin/kafka-topics.sh \
+$KAFKA_PATH/bin/kafka-topics.sh \
 --bootstrap-server "$BROKER" \
 --list \
 --command-config "$CLIENT_CONFIG"
