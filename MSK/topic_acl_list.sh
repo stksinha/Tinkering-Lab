@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Configuration
+KAFKA_PATH="/opt/kafka/kafka"
+CLIENT_CONFIG="$KAFKA_PATH/config/client.properties"
+
 # Usage: ./topic_acl_list.sh <BROKER_HOST:PORT> <TOPIC_NAME>
 # Example: ./topic_acl_list.sh localhost:9092 my-topic
 
@@ -19,4 +23,4 @@ export KAFKA_HEAP_OPTS="-Xmx1G -Xms512M"
 --bootstrap-server "$BROKER" \
 --list \
 --topic "$TOPIC" \
---command-config /opt/kafka/kafka/config/client.properties
+--command-config "$CLIENT_CONFIG"
